@@ -113,6 +113,7 @@ class NameCheap(object):
     response = requests.post(url, headers=header, data = newdata)
     return response
 
+
   def add_record_certbot(self, domain, validation):
     host_length = len(domain) - len( "." + self.data_template["SLD"] + "." + self.data_template["TLD"] )  
     hostname = domain[:host_length] 
@@ -130,6 +131,7 @@ class NameCheap(object):
       "TTL":  "60"
     }
     self.add_record(record)
+
 
   def delete_record_certbot(self, domain, validation):
     host_length = len(domain) - len( "." + self.data_template["SLD"] + "." + self.data_template["TLD"] )
@@ -149,6 +151,7 @@ class NameCheap(object):
       "TTL":  "60"
     }
     self.delete_record(record)
+
 
   def delete_record(self,record):
     records = self.get_records()
@@ -194,9 +197,10 @@ if __name__ == "__main__":
   # logging.basicConfig(level=logging.WARN, format='%(asctime)s UTC %(levelname)s %(module)s(%(funcName)s) [%(process)d-%(thread)d-%(threadName)s]: %(message)s')
   logging.basicConfig(level=logging.INFO, format='%(asctime)s UTC %(levelname)s %(module)s %(message)s')
   parser = argparse.ArgumentParser(description='Optional app description')
-  parser.add_argument('--add',      action='store_true', help='Add records from namecheap based on provided json file')
-  parser.add_argument('--delete',   action='store_true', help='Delete records from namecheap based on provided json file')
-  parser.add_argument('--sync',     action='store_true', help='Sync records from namecheap based on provided json file')
+  parser.add_argument('--add',      action='store_true', help='Add TXT auth record from certbot to Namecheap DNS records')
+  parser.add_argument('--delete',   action='store_true', help='Delete TXT auth record from certbot to Namecheap DNS records')
+  parser.add_argument('--upload',     action='store'     , help='Upload records YAML file to Namecheap')
+
   args = parser.parse_args()
 
   apiUser     = os.getenv('NAMECHEAP_USER', None)
@@ -224,10 +228,13 @@ if __name__ == "__main__":
     print("ACME CHALLANGE",cert_domain,cert_valid)
     nc.add_record_certbot(cert_domain,cert_valid)
     time.sleep(60)
+
   elif args.delete:
     nc.delete_record_certbot(cert_domain,cert_valid)
-  elif args.sync:
-    logging.info("Overwriting records:")
+
+  elif args.upload:
+    file = args.upload
+    logging.info(f"Overwriting records from {file}:")
     records = []
     if os.path.exists(file):
       with open(file, "r") as stream:
@@ -240,8 +247,13 @@ if __name__ == "__main__":
       logging.error(f"Yaml records file '{file}' does not exists!")
       sys.exit(1)
 
-
-    nc.overwrite(records)
-    nc.get_records(True)
+    if records and len(records):
+      nc.overwrite(records)
+      nc.get_records(True)
+    else:
+      logging.error(f"No records in yaml file '{file}'!")
+      sys.exit(1)      
   else:
-    nc.get_records(True)
+    records = nc.get_records()
+    yaml_string = "---\n" + yaml.dump( records, default_flow_style=False )
+    print ( yaml_string )

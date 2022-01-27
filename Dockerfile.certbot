@@ -1,0 +1,20 @@
+# docker buildx build -f Dockerfile.certbot --platform linux/amd64,linux/arm64 --push  -t cr.arato.biz/certbot-namecheap .
+
+FROM python:3.9.10-alpine
+
+WORKDIR /namecheap
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+RUN apk add build-base 
+RUN apk add libressl-dev
+RUN apk add musl-dev
+RUN apk add libffi-dev
+RUN pip install certbot
+RUN mkdir /etc/letsencrypt
+COPY namecheap.py .
+RUN chmod +x ./namecheap.py
+COPY cert_renew.sh .
+RUN chmod +x ./cert_renew.sh
+
+CMD [ "/namecheap/cert_renew.sh" ]
+

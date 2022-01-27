@@ -23,6 +23,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "NameCheap Certbot Delete",
+            "type": "python",
+            "request": "launch",
+            "program": "namecheap.py",
+            "args": ["--delete"],
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "NameCheap Certbot Load",
             "type": "python",
             "request": "launch",

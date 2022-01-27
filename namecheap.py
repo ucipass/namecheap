@@ -212,9 +212,13 @@ if __name__ == "__main__":
   file        = os.path.join( os.getcwd() , "records/records.yaml" )
 
   if ( apiUser and apiKey and subDomain and topDomain ):
-    pass
+    if (args.add or args.delete) and not ( cert_valid and cert_domain ) :
+      logging.error(f"One or more certbot environment variables are missing:")
+      logging.error(f"CERTBOT_DOMAIN: {cert_domain}")
+      logging.error(f"CERTBOT_VALIDATION: {cert_valid}")  
+      sys.exit(1)    
   else:
-    logging.error(f"One or more environment variables are missing:")
+    logging.error(f"One or more namecheap environment variables are missing:")
     logging.error(f"NAMECHEAP_USER: {apiUser}")
     logging.error(f"NAMECHEAP_APIKEY: {apiKey}")
     logging.error(f"NAMECHEAP_SUBDOMAIN: {subDomain}")

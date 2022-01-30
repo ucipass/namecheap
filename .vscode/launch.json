@@ -36,7 +36,7 @@
             "type": "python",
             "request": "launch",
             "program": "namecheap.py",
-            "args": ["--upload","./records/records.yaml"],
+            "args": ["--load","./records/records.yaml"],
             "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         }

@@ -32,11 +32,11 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "NameCheap Certbot Load",
+            "name": "NameCheap Certbot Upload",
             "type": "python",
             "request": "launch",
             "program": "namecheap.py",
-            "args": ["--load","./records/records.yaml"],
+            "args": ["--upload","./records/records.yaml"],
             "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         }

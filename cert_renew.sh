@@ -21,6 +21,7 @@ if [ -n $CERT_SAN ]; then
     --manual-auth-hook    "./namecheap.py --add" \
     --manual-cleanup-hook "./namecheap.py --delete"  \
     --manual --preferred-challenges dns \
+    --force-renewal \
     certonly
 
 else
@@ -33,6 +34,7 @@ else
     --manual-auth-hook    "./namecheap.py --add" \
     --manual-cleanup-hook "./namecheap.py --delete"  \
     --manual --preferred-challenges dns \
+    --force-renewal \
     certonly
 
 fi

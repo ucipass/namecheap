@@ -10,7 +10,6 @@
             "request": "launch",
             "program": "namecheap.py",
             "args": [],
-            "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         },
         {
@@ -19,7 +18,6 @@
             "request": "launch",
             "program": "namecheap.py",
             "args": ["--add"],
-            "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         },
         {
@@ -28,7 +26,6 @@
             "request": "launch",
             "program": "namecheap.py",
             "args": ["--delete"],
-            "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         },
         {
@@ -37,7 +34,6 @@
             "request": "launch",
             "program": "namecheap.py",
             "args": ["--upload","./records/records.yaml"],
-            "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal"
         }
     ]

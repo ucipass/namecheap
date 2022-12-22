@@ -7,7 +7,9 @@ import os
 import logging
 import argparse
 import yaml
-
+import urllib.request
+from dotenv import load_dotenv
+load_dotenv()
 
 sample_yaml_records = """
 ---
@@ -250,8 +252,15 @@ if __name__ == "__main__":
     else:
       logging.error(f"Yaml records file '{file}' does not exists!")
       sys.exit(1)
-
+    try:
+      ip = urllib.request.urlopen("https://checkip.amazonaws.com").read().decode("utf-8").strip()
+    except:
+      logging.error(f"unable to determine own IP from checkip.amazonaws.com!")
+      sys.exit(1)  
     if records and len(records):
+      for record in records:
+        if not "Address" in record:
+          record["Address"] = ip
       nc.overwrite(records)
       nc.get_records(True)
     else:
